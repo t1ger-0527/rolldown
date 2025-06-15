@@ -367,7 +367,10 @@ impl GenerateStage<'_> {
             .entry(importee_chunk_id)
             .or_default()
             .push(CrossChunkImportItem { import_ref });
-          index_chunk_exported_symbols[importee_chunk_id].entry(import_ref).or_default();
+          let exported_symbols = index_chunk_exported_symbols[importee_chunk_id].entry(import_ref).or_default();
+          if exported_symbols.is_empty() {
+            exported_symbols.push(import_ref.name(&self.link_output.symbol_db).to_rstr());
+          }
         }
       }
 
